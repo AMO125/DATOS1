@@ -1,0 +1,56 @@
+from locale import currency, setlocale, LC_MONETARY
+
+class Consola: #Creamos la clase consola con los atributos requeridos.
+    def __init__(self, *params):
+        if len(params) == 4:
+            self.__codigo = params[0]
+            self.__nombre = params[1]
+            self.__fabricante = params[2]
+            self.__precio = float(params[3])
+        else:
+            #Constructor por omisión.
+            self.__codigo = A12345678Z
+            self.__nombre = "PlayStation 5"
+            self.__fabricante = "Sony"
+            self.__precio = 11999
+
+    #Métodos getter y setter
+
+    @property
+    def codigo(self):
+        return self.__codigo
+
+    @codigo.setter
+    def codigo(self, codigo):
+        self.__codigo = codigo
+
+    @property
+    def nombre(self):
+        return self.__nombre
+
+    @nombre.setter
+    def nombre(self, nombre):
+        self.__nombre = nombre
+
+    @property
+    def fabricante(self):
+        return self.__fabricante
+
+    @fabricante.setter
+    def fabricante(self, fabricante):
+        self.__fabricante = fabricante
+
+    @property
+    def precio(self):
+        return self.__precio
+
+    @precio.setter
+    def precio(self, precio):
+        self.__precio = float(precio)
+
+    #Métodos calculadores
+
+    def __str__(self):
+        setlocale(LC_MONETARY, "en_US") #Le damos formato de moneda.
+        return (str(self.__codigo)+ " | " + str(self.__nombre)
+                + " | " + str(self.__fabricante)+ " | " + str(currency(self.__precio, grouping=True)))
