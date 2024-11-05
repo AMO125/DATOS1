@@ -10,6 +10,13 @@ from locale import currency, setlocale, LC_MONETARY
 setlocale(LC_MONETARY, "en_US")
 
 def numSolicitudes (pila: Pila, dato, atributo):
+    '''
+        función que nos cuenta el número de solicitudes que una consola ha tenido
+        :param pila: pila en la que están guardadas las consolas
+        :param dato: El dato en específico que estamos buscando
+        :param atributo: El atributo por el que se busca en la pila
+        :return: El número de solicitudes que se registraron de la pila
+    '''
     it1 = iter(pila)
     num = 0
     if atributo == "NombreConsola":
@@ -36,6 +43,13 @@ def numSolicitudes (pila: Pila, dato, atributo):
     return num
 
 def numConsolas (cola: Cola, dato, atributo):
+    '''
+        Función que cuenta el número de consolas en el almacen
+        :param cola: El lugar donde se buscan las consolas
+        :param dato: El dato en especifico a buscar
+        :param atributo: El atributo al que pertenece el dato a buscar
+        :return: El número de consolas que hay guardadas
+    '''
     it1 = iter(cola)
     num = 0
     if atributo == "nombre":
@@ -62,6 +76,13 @@ def numConsolas (cola: Cola, dato, atributo):
     return num
 
 def eliminarN (cola: Cola, consola, n: int):
+    '''
+        Método que elimina una consola por medio de su número de serie
+        :param cola: La cola de la que se desea eliminar ciertas consolas
+        :param consola: La consola a eliminar
+        :param n:el número de la consola a eliminar
+        :return: La cola sin las consolas recien eliminadas
+    '''
     it1=iter(cola)
     Cola2 = Cola()
     eliminaciones = 0
@@ -80,6 +101,11 @@ def eliminarN (cola: Cola, consola, n: int):
     return Cola2
 
 def leerArchivoConsolas(cola: Cola, archivo_csv):
+        '''
+        Método que permite leer los archivos donde se guardan las consolas en formato csv
+        :param cola: la cola en la que se van a agregar las consolas leidas
+        :param archivo_csv: El archivo de donde se van a leer las consolas
+        '''
         with open(archivo_csv, newline='', encoding='utf-8') as csvfile:
             lector = csv.reader(csvfile)
             next(lector)  # Saltar la primera fila si contiene encabezados
@@ -99,6 +125,11 @@ def leerArchivoConsolas(cola: Cola, archivo_csv):
                     continue
 
 def leerArchivoSolicitudes(cola: Cola, archivo_csv):
+        '''
+        Método que permite leer las solicitudes de una consola
+        :param cola: La cola donde se guardan los archivos leidos
+        :param archivo_csv: El archivo del cual vamos a leer las solicitudes
+        '''
         with open(archivo_csv, newline='', encoding='utf-8') as csvfile:
             lector = csv.reader(csvfile)
             next(lector)  # Saltar la primera fila si contiene encabezados
@@ -119,6 +150,7 @@ def leerArchivoSolicitudes(cola: Cola, archivo_csv):
                     if cantidad<numConsolas(cola, consola, "nombre"):
                         cantidad = int(fila[3])
                     else:
+                        print(f"Solicitud rechazada: No hay suficientes consolas {consola}.")
                         raise ValueError
                     precioTotal = cantidad * precio
 
@@ -131,7 +163,6 @@ def leerArchivoSolicitudes(cola: Cola, archivo_csv):
 
                 except ValueError as e:
                     print(f"Error al procesar la fila: {fila}")
-                    print(f"Error: {e}")
                     continue
         return cola
 
@@ -190,9 +221,10 @@ if __name__=="__main__":
                 while len(codigo) != 10 or not(codigo[0].isalpha() and codigo[9].isalpha() and codigo[1:8].isnumeric()):
                     codigo = input("Por favor, ingrese un código con el formato adecuado "
                                    "(10 caracteres, primero y último alfabéticos, los demás numéricos): ")
-                print("a) PlayStation 5\n"
-                                    "b) Xbox series S\n"
-                                    "c) Xbox Series X")
+                print("Consolas: \n"
+                            "a) PlayStation 5\n"
+                            "b) Xbox series S\n"
+                            "c) Xbox Series X\n")
                 tipoconsola = input("Elija el nombre de la consola a agregar: ")
                 while tipoconsola.lower() not in "abc" or len(tipoconsola)!=1:
                     tipoconsola = input("Por favor, ingrese una opción válida. [a,b,c]: ")
@@ -219,7 +251,7 @@ if __name__=="__main__":
                 print("Criterios de búsqueda: \n "
                       "a) Por código de producto.\n"
                       "b) Por nombre de consola. \n"
-                      "c) Por empresa fabricante.")
+                      "c) Por empresa fabricante.\n")
                 criterio = input("Elija una opción: ")
                 while criterio.lower() not in "abc" or len(criterio) != 1:
                     criterio = input("Por favor, ingrese una opción válida. [a,b,c]: ")
@@ -229,12 +261,12 @@ if __name__=="__main__":
                         print(f"Hay un total de {numConsolas(BandaMagnetica, codigoConsola, "codigo")} consolas "
                               f"con el código {codigoConsola}.")
                     case "b":
-                        print("Opciones: \n"
+                        print("Consolas: \n"
                               "a) PlayStation 5\n"
                               "b) Xbox series S\n"
-                              "c) Xbox Series X")
+                              "c) Xbox Series X\n")
                         opcionNombre = input("Elija una opción: ")
-                        while opcionNombre not in "abc" or len(opcionNombre)!=1:
+                        while opcionNombre.lower() not in "abc" or len(opcionNombre)!=1:
                             opcionNombre = input("Por favor, ingrese una opción válida [a,b,c]: ")
                         match opcionNombre.lower():
                             case "a":
@@ -249,7 +281,7 @@ if __name__=="__main__":
                               "a) Sony \n"
                               "b) Microsoft")
                         opcionFabricante = input("Elija una opción.")
-                        while opcionFabricante not in "abc" or len(opcionFabricante)!=1:
+                        while opcionFabricante.lower() not in "abc" or len(opcionFabricante)!=1:
                             opcionFabricante = input("Por favor, ingrese una opción válida [a,b,c]: ")
                         match opcionFabricante.lower():
                             case "a":
@@ -345,6 +377,11 @@ if __name__=="__main__":
                 match criterio.lower():
                     case "a":
                         RFC = input("Ingrese el RFC de la tienda ")
+                        while len(RFC) != 12 or not (
+                                RFC[0:2].isalpha() and RFC[3:8].isnumeric() and (j.isalpha() or j.isnumeric() for j in
+                                                                                 RFC[9:11])):
+                            RFC = input("Por favor, ingrese un RFC con el formato de empresa. "
+                                        "(12 caracteres: primeros 3 alfabéticos, sig. 6 numéricos, últimos 3 alfanuméricos.):")
                         print(f"Hay un total de {numSolicitudes(PilaSolicitudes,RFC, "RFCtienda")} "
                               f"solicitudes de la tienda con el RFC {RFC}")
                     case "b":
@@ -370,21 +407,27 @@ if __name__=="__main__":
             case "7":
                 if BandaMagnetica.esta_vacio() and PilaSolicitudes.esta_vacia():
                     print("La banda magnética y la pila de solicitudes están vacías.")
+                    break
                 else:
-                    with open(archivo1 + ".csv", 'w', newline='', encoding='utf-8') as archivo_csv:
-                        escritor_csv = csv.writer(archivo_csv)
-                        escritor_csv.writerow(["Código", "Nombre", "Fabricante", "Precio"])  # Encabezado
-                        for consola in BandaMagnetica:
-                            escritor_csv.writerow([consola.codigo, consola.nombre, consola.fabricante, consola.precio])
-                        print(f"Repisa ordenada guardada en {archivo1}.csv")
-                    with open(archivo2 + ".csv", 'w', newline='', encoding='utf-8') as archivo_csv:
-                        escritor_csv = csv.writer(archivo_csv)
-                        escritor_csv.writerow(["RFC", "Tienda", "Consola", "Cantidad"])  # Encabezado
-                        for solicitud in PilaSolicitudes:
-                            escritor_csv.writerow([consola.codigo, consola.nombre, consola.fabricante, consola.precio])
-                        print(f"Repisa ordenada guardada en {archivo2}.csv")
-                print("Gracias por usar el almacén de consolas R2-Dato. ¡Hasta Luego!")
-                break
+                    try:
+                        with open(archivo1, 'w', newline='', encoding='utf-8') as archivo_csv:
+                            escritor_csv = csv.writer(archivo_csv)
+                            escritor_csv.writerow(["Código", "Nombre", "Fabricante", "Precio"])  # Encabezado
+                            for consola in BandaMagnetica:
+                                escritor_csv.writerow([consola.codigo, consola.nombre, consola.fabricante, consola.precio])
+                            print(f"Repisa ordenada guardada en {archivo1}")
+                        with open(archivo2, 'w', newline='', encoding='utf-8') as archivo_csv:
+                            escritor_csv = csv.writer(archivo_csv)
+                            escritor_csv.writerow(["RFC", "Tienda", "Consola", "Cantidad"])  # Encabezado
+                            for solicitud in PilaSolicitudes:
+                                escritor_csv.writerow([consola.codigo, consola.nombre, consola.fabricante, consola.precio])
+                            print(f"Repisa ordenada guardada en {archivo2}")
+                        print("Gracias por usar el almacén de consolas R2-Dato. ¡Hasta Luego!")
+                        break
+                    except OSError as e:
+                        print("Ocurrió un error con el guardado de archivos. Vuélvalo a intentar.")
+                        continue
+
 
         respuesta = input("¿Desea continuar usando el programa? [S/N]: ")
         while respuesta.lower() not in "sn" or len(respuesta)!=1:
@@ -394,18 +437,23 @@ if __name__=="__main__":
         elif respuesta.lower() == "n":
             if BandaMagnetica.esta_vacio() and PilaSolicitudes.esta_vacia():
                 print("La banda magnética y la pila de solicitudes están vacías.")
+                print("Gracias por usar el almacén de consolas R2-Dato. ¡Hasta Luego!")
+                break
             else:
-                with open(archivo1 + ".csv", 'w', newline='', encoding='utf-8') as archivo_csv:
-                    escritor_csv = csv.writer(archivo_csv)
-                    escritor_csv.writerow(["Código", "Nombre", "Fabricante", "Precio"])  # Encabezado
-                    for consola in BandaMagnetica:
-                        escritor_csv.writerow([consola.codigo, consola.nombre, consola.fabricante, consola.precio])
-                    print(f"Repisa ordenada guardada en {archivo1}.csv")
-                with open(archivo2 + ".csv", 'w', newline='', encoding='utf-8') as archivo_csv:
-                    escritor_csv = csv.writer(archivo_csv)
-                    escritor_csv.writerow(["RFC", "Tienda", "Consola", "Cantidad"])  # Encabezado
-                    for solicitud in PilaSolicitudes:
-                        escritor_csv.writerow([consola.codigo, consola.nombre, consola.fabricante, consola.precio])
-                    print(f"Repisa ordenada guardada en {archivo2}.csv")
-            print("Gracias por usar el almacén de consolas R2-Dato. ¡Hasta Luego!")
-            break
+                try:
+                    with open(archivo1, 'w', newline='', encoding='utf-8') as archivo_csv:
+                        escritor_csv = csv.writer(archivo_csv)
+                        escritor_csv.writerow(["Código", "Nombre", "Fabricante", "Precio"])  # Encabezado
+                        for consola in BandaMagnetica:
+                            escritor_csv.writerow([consola.codigo, consola.nombre, consola.fabricante, consola.precio])
+                        print(f"Repisa ordenada guardada en {archivo1}")
+                    with open(archivo2, 'w', newline='', encoding='utf-8') as archivo_csv:
+                        escritor_csv = csv.writer(archivo_csv)
+                        escritor_csv.writerow(["RFC", "Tienda", "Consola", "Cantidad"])  # Encabezado
+                        for solicitud in PilaSolicitudes:
+                            escritor_csv.writerow([consola.codigo, consola.nombre, consola.fabricante, consola.precio])
+                        print(f"Repisa ordenada guardada en {archivo2}")
+                        print("Gracias por usar el almacén de consolas R2-Dato. ¡Hasta Luego!")
+                        break
+                except OSError as e:
+                    print("Ocurrió un error con el guardado de archivos, vuélvalo a intentar.")
